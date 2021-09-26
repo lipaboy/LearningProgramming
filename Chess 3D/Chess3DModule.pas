@@ -16,7 +16,7 @@ type
 var 
   BlackC := GrayColor(60);
   WhiteC := Colors.White;
-  delay := 1000;
+  delay := 500;
 
 type ChessFigure = class
   f: FileModelT;
@@ -58,12 +58,12 @@ begin
   color := cc;
   var c := cc=Black ? BlackC : WhiteC;
   case kk of
-bishopK: f := FileModel3D(4,14,0,'bishop.obj',c);
-horseK : f := FileModel3D(2,14,0,'horse.obj',c);
-kingK  : f := FileModel3D(6,14,0,'king.obj',c);
-pownK  : f := FileModel3D(0,12,0,'pawn.obj',c);
-queenK : f := FileModel3D(8,14,0,'queen.obj',c);
-rockK  : f := FileModel3D(0,14,0,'rook.obj',c);
+    bishopK: f := FileModel3D(4,14,0,'bishop.obj',c);
+    horseK : f := FileModel3D(2,14,0,'horse.obj',c);
+    kingK  : f := FileModel3D(6,14,0,'king.obj',c);
+    pownK  : f := FileModel3D(0,12,0,'pawn.obj',c);
+    queenK : f := FileModel3D(8,14,0,'queen.obj',c);
+    rockK  : f := FileModel3D(0,14,0,'rook.obj',c);
   end;
   k := kk;
 end;
@@ -85,10 +85,12 @@ function ChessFigure.AnimMoveTo(xx,yy: integer): ChessFigure;
 begin
   var dx := xx - x;
   var dy := yy - y;
-  f.AnimMoveOn(-dx*2,-dy*2,0,delay/1000).WhenCompleted(procedure -> begin
+  f.AnimMoveOn(-dx*2,-dy*2,0, delay * 1.0 / 1000.0).WhenCompleted(procedure -> begin
     a[y,x] := nil;
-    if a[yy,xx]<>nil then
+    if a[yy,xx] <> nil then
+    begin
       a[yy,xx].Destroy;
+    end;
     a[yy,xx] := Self;
   end
   ).Begin;
@@ -140,7 +142,7 @@ begin
   a[y,x].AnimMoveTo(x1,y1);
   
   //Println('->',a[y,x],a[y1,x1]);
-  Sleep(delay);
+  Sleep(delay + 100);
 end;
 
 procedure TurnB(s1,s2: string);
